@@ -14,7 +14,7 @@ def getLineValue(line):
     return first * 10 + last
 
 total = 0
-with open('input.txt') as f:
+with open('day1/input.txt') as f:
     line = f.readline().strip()
     while line:
         lineValue = getLineValue(line)
