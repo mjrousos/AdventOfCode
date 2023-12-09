@@ -1,9 +1,9 @@
 from typing import List
 import re
-from mapper import Mapper, MapComponent
+from mapper import Mapper, MapComponent, SeedRange
 
 with open('day5/input.txt') as f:
-    seedRanges = [int(number) for number in f.readline().strip().split(' ')[1::]]
+    seedRangeInput = [int(number) for number in f.readline().strip().split(' ')[1::]]
 
     mapper = Mapper()
     mappers : List[Mapper] = [] 
@@ -18,35 +18,21 @@ with open('day5/input.txt') as f:
                 mappers.append(mapper)
                 mapper = Mapper()
 
-seeds = []
-totalSeeds = 0
-i = 0
-while i < len(seedRanges):
-    totalSeeds += seedRanges[i + 1]
-    for j in range(seedRanges[i + 1]):
-        seeds.append(seedRanges[i] + j)
-    i += 2
-    print(f'Added {i/2} of {len(seedRanges)/2} seed ranges')
-
-print(f'Seed count: {totalSeeds}')
-
 if len(mapper.mapComponents) > 0:
     mappers.append(mapper)
     mapper = Mapper()
 
-lowestLocaton = None
-locations = []
-for i, seed in enumerate(seeds):
-    x = seed
+seedRanges = []
+locationRanges = []
+i = 0
+while i < len(seedRangeInput):
+    seedRanges.append(SeedRange(seedRangeInput[i], seedRangeInput[i+1]))
+    i += 2
 
-    # There's probably a more efficient way to do this
+for seedRange in seedRanges:
+    s = [seedRange]
     for mapper in mappers:
-        x = mapper.Map(x)
+        s = mapper.MapRange(s)
+    locationRanges.extend(s)
 
-    locations.append(x)
-    if lowestLocaton is None or x < lowestLocaton:
-        lowestLocaton = x
-    print(f'Mapped {i} of {totalSeeds} seeds')
-
-print(f'Locations: {locations}')
-print(f'Lowest location: {lowestLocaton}')
+print(f'Lowest location: {min([locRange.start for locRange in locationRanges])}')
