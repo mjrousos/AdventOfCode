@@ -5,4 +5,5 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="day1/day1.csproj" />
+  <Project Path="day2/day2.csproj" />
 </Solution>
